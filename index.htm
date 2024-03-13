@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="https://www.weistec.com/favicon.ico" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <title>Declared Value Rates</title>
+    <title>Declared Value Rate Calculator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <h1 class="text-center">Declared Value Rate Calculator</h1>
@@ -13,68 +12,60 @@
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <label for="Cart-Total" class="form-label">Enter Cart Total (exlcude any discounts):</label>
-                <input class="form-control" type="tel" name="Cart-Total" id="cartTotal" required>
-            </div>
-            <div class="col-6">
-                <button class="btn btn-primary" id="calculate">Calculate</button>
+                <form onsubmit="calculate(event)">
+                    <label for="Cart-Total" class="form-label">Enter Cart Total (exclude any discounts):</label>
+                    <input class="form-control" type="tel" name="Cart-Total" id="cartTotal" required>
+                    <br>
+                    <button class="btn btn-primary">Calculate</button>
+                    <br>
+                </form>
             </div>
         </div>
 
         <div class="row">
             <div class="col-12">
-                <strong id="output"></strong>
+                <strong id="output" style="font-size: 30px;"></strong>
             </div>
         </div>
     </div>
 
-</body>
+    <script src="./main.js">
+            event.preventDefault();
 
-<script>
+            let total = parseFloat(document.getElementById("cartTotal").value);
 
-    function calculate() {
-
-        let total = document.getElementById("cartTotal").value;
-        
-        if (isNaN(total)) { 
-            alert("You must enter a number value!");
-        }
-        else{
-            if(total > 100){
-                if(total < 300){
-                    let rate = 4.35;
-                }
-                elseif(total > 300){
-                    let totalRemainder = total % 100;
-                    if(totalRemainder !== 0){
-                        let adjTotal = total - totalRemainder + 100;
-                        let rate = (adjTotal * 0.0145).toFixed(2);
-                    }
-                    else{
-                        let rate = (total * 0.0145).toFixed(2);
-                    }
-                }
-    
+            if (isNaN(total)) { 
+                alert("You must enter a number value!");
             }
-    
-           } 
+            else {
+                let rate;
+                if (total > 100 && total < 300) {
+                    rate = 4.35;
+                }
+                else if (total >= 300) {
+                    let totalRemainder = total % 100;
+                    if (totalRemainder !== 0) {
+                        let adjTotal = total - totalRemainder + 100;
+                        rate = (adjTotal * 0.0145).toFixed(2);
+                    }
+                    else {
+                        rate = (total * 0.0145).toFixed(2);
+                    }
+                }
 
-           let formattedRate = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-           }).format(rate);
+                if (rate !== undefined) {
+                    let formattedRate = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).format(rate);
 
-           let output = document.getElementById("output");
-
-           output.innerText = `Rate: ${formattedRate}`;
-
-
-    }
-    
-
-
-</script>
-
+                    let output = document.getElementById("output");
+                    output.innerText = `Rate: ${formattedRate}`;
+                }
+            }
+        }
+    </script>
+</body>
 </html>
