@@ -2,12 +2,12 @@ function calculate(event) {
     event.preventDefault();
 
     let total = parseFloat(document.getElementById("cartTotal").value);
+    let rate = 0;
 
     if (isNaN(total)) { 
         alert("You must enter a number value!");
     }
     else {
-        let rate;
         if (total > 100 && total < 300) {
             rate = 4.35;
         }
@@ -22,7 +22,7 @@ function calculate(event) {
             }
         }
 
-        if (rate !== undefined) {
+        if (rate > 0) {
             let formattedRate = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
@@ -32,6 +32,10 @@ function calculate(event) {
 
             let output = document.getElementById("output");
             output.innerText = `Rate: ${formattedRate}`;
+            
+        } else {
+            output.innerText = "No Charge"
         }
+
     }
 }
